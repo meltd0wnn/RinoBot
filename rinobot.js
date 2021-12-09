@@ -27,7 +27,7 @@ const embedhelp = new MessageEmbed()
 	.setURL("https://www.artstation.com/rinotuna")
 	.setAuthor("RinoBot", "https://cdnb.artstation.com/p/users/avatars/002/682/571/large/a6dbb3f9e8b766b045e4c50ffed055be.jpg?1614174544", "https://www.artstation.com/rinotuna")
 	.setColor(0x00AE86)
-	.setDescription("Olá! Sou um bot feito para o #RinotunaChallenge do servidor Comunidade dos Artistas!\n Rinotuna é um artista famoso pelos seus _gijinkas_, dê uma olhada no Artstation: https://www.artstation.com/rinotuna\n\n Você pode usar meus comandos no chat específico do desafio:\n\n **r!help** | Te mostra os comandos no qual eu respondo!\n\n **r!regras** | Assim eu invoco as regras no chat para que os ADMs não tenham que explicar de novo.\n\n **r!rino** _legenda da imagem_ | ENVIE O ANEXO JUNTO COM O COMANDO E A LEGENDA. Esse comando é utilizado para participar do desafio ou atualizar sua participação.\n\n **r!sair** | Retira sua participação do desafio atual.\n\n :arrow_down: PARA ADMS :arrow_down: \n\n**r!start** *OPCIONAL: tempo do desafio* | Faz o embaralhamento das submissões e começa o desafio. (Você só pode começar um novo jogo ao resetar o anterior)\n\n **r!remove** | Retira uma submissão.\n\n **r!reset** | Reseta o jogo.\n\n Espero que se divirtam!")
+	.setDescription("Olá! Sou um bot feito para o #RinotunaChallenge do servidor Comunidade dos Artistas!\n Rinotuna é um artista famoso pelos seus _gijinkas_, dê uma olhada no Artstation: https://www.artstation.com/rinotuna\n\n Você pode usar meus comandos no chat específico do desafio:\n\n **r!help** | Te mostra os comandos no qual eu respondo!\n\n **r!regras** | Assim eu invoco as regras no chat para que os ADMs não tenham que explicar de novo.\n\n **r!rino** _legenda da imagem_ | ENVIE O ANEXO JUNTO COM O COMANDO E A LEGENDA. Esse comando é utilizado para participar do desafio ou atualizar sua participação.\n\n **r!sair** | Retira sua participação do desafio atual.\n\n :arrow_down: PARA ADMS :arrow_down: \n\n**r!lista** | Mostra a lista dos participantes ou a lista dos sorteios (Caso tenha começado o jogo)\n\n**r!start** *OPCIONAL: tempo do desafio* | Faz o embaralhamento das submissões e começa o desafio. (Você só pode começar um novo jogo ao resetar o anterior)\n\n **r!remove** | Retira uma submissão.\n\n **r!reset** | Reseta o jogo.\n\n Espero que se divirtam!")
 //.setImage("http://i.imgur.com/yVpymuV.png")
 
 client.on("ready", () => {
@@ -242,10 +242,10 @@ client.on("messageCreate", msg => {
 			break;
 		case 'lista':
 			if (!msg.member.roles.cache.some(Cargo => config.cargos.some(Id => Cargo.id == Id))) return;
-			if (start > 0){
+			if (start > 0) {
 				msg.channel.send(lista2);
 			}
-			else{
+			else {
 				//msg.channel.send("O jogo ainda não começou, não tenho como enviar uma lista de sorteados!")
 				liste(msg);
 			}
@@ -288,7 +288,7 @@ client.on("messageCreate", msg => {
 		case 'regras':
 			//console.log("0");
 			if (!msg.member.roles.cache.some(Cargo => config.cargos.some(Id => Cargo.id == Id))) {
-				msg.reply("Você não pode sair enviando regras para os outros! Envie no chat e marque o colega ou peça à algum ADM para enviar.");
+				msg.reply("Você não pode sair enviando regras para os outros! Peça a algum ADM para enviar para a pessoa ou colocá-la no chat.");
 				return;
 			}
 			if (!args1) {
