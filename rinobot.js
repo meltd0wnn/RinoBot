@@ -1,4 +1,4 @@
-const { Client, Intents } = require("discord.js");
+const { Client, Intents, MessageEmbed } = require("discord.js");
 const config = require(process.cwd() + "/config.json");
 const input = [];
 var pont = 0;
@@ -21,6 +21,14 @@ const embeddoburro = {
 		}
 	],
 }
+
+const embedhelp = new MessageEmbed()
+	.setTitle("AJUDAS")
+	.setURL("https://www.artstation.com/rinotuna")
+	.setAuthor("RinoBot", "https://cdnb.artstation.com/p/users/avatars/002/682/571/large/a6dbb3f9e8b766b045e4c50ffed055be.jpg?1614174544", "https://www.artstation.com/rinotuna")
+	.setColor(0x00AE86)
+	.setDescription("Olá! Sou um bot feito para o #RinotunaChallenge do servidor Comunidade dos Artistas!\n Rinotuna é um artista famoso pelos seus _gijinkas_, dê uma olhada no Artstation: https://www.artstation.com/rinotuna\n\n Você pode usar meus comandos no chat específico do desafio:\n\n **r!help** | Te mostra os comandos no qual eu respondo!\n\n **r!regras** | Assim eu invoco as regras no chat para que os ADMs não tenham que explicar de novo.\n\n **r!rino** _legenda da imagem_ | ENVIE O ANEXO JUNTO COM O COMANDO E A LEGENDA. Esse comando é utilizado para participar do desafio ou atualizar sua participação.\n\n **r!sair** | Retira sua participação do desafio atual.\n\n :arrow_down: PARA ADMS :arrow_down: \n\n**r!start** *OPCIONAL: tempo do desafio* | Faz o embaralhamento das submissões e começa o desafio. (Você só pode começar um novo jogo ao resetar o anterior)\n\n **r!remove** | Retira uma submissão.\n\n **r!reset** | Reseta o jogo.\n\n Espero que se divirtam!")
+//.setImage("http://i.imgur.com/yVpymuV.png")
 
 client.on("ready", () => {
 	console.log("Rinobot está pronto para sortear!\nPara parar o bot, aperte Ctrl + C ou feche o Terminal!\nPara mais informações do Bot, digite " + config.prefix + "help")
@@ -47,8 +55,10 @@ function startf(msg) {
 		while (array.some((v, i) => v === i)) {
 			shuffle(array)
 		}
+		var lista2 = "**Esse foi o que cada um tirou:**\n\n"
 		for (let i = 0; i < input.length; i++) {
 			//console.log("0");
+			lista2 += (i + 1) + " - **" + input[i].ply.username + "** : " + input[array[i]].args + "\n";
 			input[i].ply.send("Seu objeto é: \"" + input[array[i]].args + "\"" + "\nE a sua imagem de referência é: " + input[array[i]].url).catch(error => {
 				msg.channel.send("Não consigo enviar a mensagem para <@" + input[i].ply + "> então postarei aqui:\n" + "Seu objeto é: \"" + input[array[i]].args + "\"" + "\nE a sua imagem de referência é: " + input[array[i]].url);
 			});
@@ -62,10 +72,30 @@ function startf(msg) {
 	}
 }
 
+function liste(msg) {
+	if (input.length >= 1) {
+		let lista = "**Estes são os usuários que estão participando deste Rinotuna, por ordem de entrada:**\n\n";
+		for (let i = 0; i < input.length; i++) {
+			lista += (i + 1) + " - **" + input[i].ply.username + "** : " + input[i].args + "\n";
+		}
+		msg.channel.send(lista);
+	}
+	else {
+		msg.reply("Não temos players o suficiente para ter uma lista.");
+	}
+}
+
+
+
 client.on("messageCreate", msg => {
-	// console.log(message.content);
+	//console.log(msg.content);
+	const prefixo = msg.content.slice(0, 2);
+	//console.log(prefixo);
 	//if (msg.content == "save") msg.reply("Salvo com sucesso!");
-	if (!msg.content.startsWith(config.prefix)) return;
+	if (!prefixo.toLowerCase().startsWith(config.prefix)) {
+		//console.log("PQ VC N VAI???????");
+		return;
+	}
 	if (!config.canais.some(Id => msg.channelId == Id)) return;
 
 	// const args = msg.content.slice(1).split(' ');
@@ -74,7 +104,7 @@ client.on("messageCreate", msg => {
 	const url = gostosa?.url;
 	var tempo = 0;
 	//if (!gostosa) return;
-	var re = new RegExp(`^${config.prefix}(\\w+)\\s?(.*)$`)
+	var re = new RegExp(`^${prefixo}(\\w+)\\s?(.*)$`)
 	const match = msg.content.match(re);
 	if (!match) return;
 	const cmd = match[1];
@@ -121,9 +151,9 @@ client.on("messageCreate", msg => {
 				var timere = /^(?:(\d+h))?(?:(\d+m)(?:in)?)?(?:(\d+s)?)?$/;
 				const mete = args?.match(timere);
 				if (!args) {
-					startf(msg);
 					if (input.length > 1) {
-						msg.channel.send("Caros jogadores do <@&911278575976583198>, o jogo começou! Vocês tem até <t:" + Math.round(currentdate.getTime() / 1000 + 3600) + ":T>");
+						startf(msg);
+						msg.channel.send("Caros jogadores do <@&911278575976583198>, o jogo começou! Vocês tem até <t:" + Math.round(currentdate.getTime() / 1000 + 3600) + ":t>");
 						start++;
 					}
 					else {
@@ -151,7 +181,7 @@ client.on("messageCreate", msg => {
 								tempo += val
 							}
 						}
-						msg.channel.send("Caros jogadores do <@&911278575976583198>, o jogo começou! Vocês tem até <t:" + Math.round(tempo) + ":T>");
+						msg.channel.send("Caros jogadores do <@&911278575976583198>, o jogo começou! Vocês tem até <t:" + Math.round(tempo) + ":t>");
 						start++;
 					}
 					else {
@@ -170,7 +200,7 @@ client.on("messageCreate", msg => {
 					msg.reply("TÁ DE TIRAÇÃO NÉ IRMÃO, VO TE MOSTRAR O SACO.");
 				}
 				else {
-					msg.reply("Você não pode remover uma entrada do desafio! Caso queira desistir, use **"+config.prefix+"sair**");
+					msg.reply("Você não pode remover uma entrada do desafio! Caso queira desistir, use **" + config.prefix + "sair**");
 					arrombado++;
 				}
 				return;
@@ -210,9 +240,19 @@ client.on("messageCreate", msg => {
 			arrombado2 = 0;
 			pont = 0;
 			break;
+		case 'lista':
+			if (!msg.member.roles.cache.some(Cargo => config.cargos.some(Id => Cargo.id == Id))) return;
+			if (start > 0){
+				msg.channel.send(lista2);
+			}
+			else{
+				//msg.channel.send("O jogo ainda não começou, não tenho como enviar uma lista de sorteados!")
+				liste(msg);
+			}
+			break;
 		case 'sair':
 			const bonitao = msg.author;
-			console.log(bonitao+ "quer sair do jogo");
+			console.log(bonitao + "quer sair do jogo");
 			const bonitin = input.find(x => x.ply.id == bonitao.id);
 			console.log(bonitin);
 			if (bonitin) {
@@ -231,7 +271,9 @@ client.on("messageCreate", msg => {
 })
 
 client.on("messageCreate", msg => {
-	var reg = new RegExp(`^${config.prefix}(\\w+)\\s?(.*)$`)
+	const prefixo = msg.content.slice(0, 2);
+	if (!prefixo.toLowerCase().startsWith(config.prefix)) return;
+	var reg = new RegExp(`^${prefixo}(\\w+)\\s?(.*)$`)
 	const match1 = msg.content.match(reg);
 	if (!match1) return;
 	const cmd1 = match1[1];
@@ -239,31 +281,25 @@ client.on("messageCreate", msg => {
 	const burro = msg.mentions.users.first();
 	switch (cmd1) {
 		case 'help':
-			msg.reply("Olá! Sou um bot feito para o #RinotunaChallenge do servidor Comunidade dos Artistas!\n" +
-				"Rinotuna é um artista famoso pelos seus _gijinkas_ , dê uma olhada no Artstation: https://www.artstation.com/rinotuna\n\n" +
-				"Você pode usar meus comandos no chat específico do desafio:\n\n" +
-				"**" + config.prefix + "help** | Te mostra os comandos no qual eu respondo!\n\n" +
-				"**" + config.prefix + "regras** | Assim eu invoco as regras no chat para que os ADMs não tenham que explicar de novo.\n\n" +
-				"**" + config.prefix + "rino** _legenda da imagem_ | ENVIE O ANEXO JUNTO COM O COMANDO E A LEGENDA. Esse comando é utilizado para participar do desafio ou atualizar sua participação.\n\n" +
-				"**" + config.prefix + "sair** | Retira sua participação do desafio atual.\n\n" +
-				"⬇ PARA ADMS ⬇\n" +
-				"**" + config.prefix + "start** _OPCIONAL: tempo do desafio_ | Faz o embaralhamento das submissões e começa o desafio. (Você só pode começar um novo jogo ao resetar o anterior)\n\n" +
-				"**" + config.prefix + "remove** | Retira uma submissão.\n\n" +
-				"**" + config.prefix + "reset** |  Reseta o jogo.\n\n" +
-				"Espero que se divirtam!");
+			msg.author.send({ embeds: [embedhelp] }).catch(error => {
+				msg.channel.send("Infelizmente <@" + msg.author + "> não tem a DM aberta para mim, então não consigo enviar as ajudas para elx.");
+			});
 			break;
 		case 'regras':
 			//console.log("0");
-			if (!args1){
-				msg.channel.send({embeds: [embeddoburro]});
+			if (!msg.member.roles.cache.some(Cargo => config.cargos.some(Id => Cargo.id == Id))) {
+				msg.reply("Você não pode sair enviando regras para os outros! Envie no chat e marque o colega ou peça à algum ADM para enviar.");
+				return;
 			}
-			else{
-				if (!msg.member.roles.cache.some(Cargo => config.cargos.some(Id => Cargo.id == Id))) {
-						msg.reply("Você não pode sair enviando regras para os outros! Envie no chat e marque o colega ou peça à algum ADM para enviar.");
-					return;
-				}
-				burro.send({ embeds: [embeddoburro]}).catch(error => {
-					msg.author.send("Infelizmente <@" + burro + "> não tem a DM aberta para mim, então não consigo enviar as regras para ele. Recomendo que use **" + config.prefix + "regras** para publicar no chat para o usuário.");
+			if (!args1) {
+				msg.reply("Você esqueceu de marcar o meliante! Tente novamente.\nCaso queira enviar no chat, digite o argumento _aqui_.");
+			}
+			else if (args1 == "aqui") {
+				msg.channel.send({ embeds: [embeddoburro] });
+			}
+			else {
+				burro.send({ embeds: [embeddoburro] }).catch(error => {
+					msg.author.send("Infelizmente <@" + burro + "> não tem a DM aberta para mim, então não consigo enviar as regras para elx. Recomendo que use **" + config.prefix + "regras** para publicar no chat para o usuário.");
 				});
 			}
 			//.then(console.log(input[i]));
