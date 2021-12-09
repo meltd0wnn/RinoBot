@@ -1,0 +1,14 @@
+{
+  "name": "rinobot",
+  "version": "1.0.0",
+  "description": "Bot para automatizar o evento do Rinotuna Challenge",
+  "main": "rinobot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "meltd0wn",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^13.3.1"
+  }
+}
